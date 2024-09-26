@@ -1,12 +1,13 @@
 import { Search, ShoppingCart } from "lucide-react"
+import { Link } from "react-router-dom"
 
 export function SiteNavigation() {
     return (
         <nav className="flex justify-between items-center px-32 py-5 bg-[#00634B]">
-            <div className="flex gap-3 items-center">
+            <Link to="/" className="flex gap-3 items-center">
                 <img src="/logo.png" className="w-7 h-10" />
                 <div className="text-white font-bold text-4xl">FLORIS</div>
-            </div>
+            </Link>
             <div className="flex items-center w-2/3 gap-8">
                 <div className="flex  w-full items-center p-1 rounded-md">
                     <input

@@ -6,8 +6,8 @@ export function ProductsGrid({ products }: { products: Product[] }) {
     return (
         <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-12 pt-14">
             {products.map((product) => (
-                <li className="hovtransition-transform duration-300 hover:scale-110">
-                    <Link key={product.id} to={`/products/${product.slug}`}>
+                <li key={product.id} className="hovtransition-transform duration-300 hover:scale-110">
+                    <Link to={`/products/${product.slug}`}>
                         <div className="border-4 border-[#F8BA8C] rounded-lg bg-[#F8BA8C]">
                             <div>
                                 <img
