@@ -20,9 +20,9 @@ export function HomeRoute() {
 
     return (
         <main className="px-32">
-            <div className="py-6">
+            <div className="py-10">
                 <Hero />
-                <div className="pt-10 flex justify-center text-5xl font-bold text-[#00634B] underline underline-offset-8">
+                <div className="pt-28 flex justify-center text-5xl font-bold text-[#00634B] underline underline-offset-8">
                     Our Product
                 </div>
                 <ProductsGrid products={products} />

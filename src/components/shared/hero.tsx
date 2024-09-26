@@ -1,6 +1,6 @@
 export function Hero() {
     return (
-        <div className="flex justify-between items-center">
+        <div className="pt-10 flex justify-between items-center">
             <p className="text-[#00634B] text-[85px] leading-none font-bold">
                 Bring Freshness,<br></br> Elevate Your Life <br></br> with Plants
             </p>
