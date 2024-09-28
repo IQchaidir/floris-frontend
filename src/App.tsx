@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import { RootRoute } from "./routes/root"
 import { HomeRoute, loader as homeLoader } from "./routes/home"
 import { ProductSlugRoute, loader as productSlugLoader } from "./routes/product"
+import { ProductsRoute, loader as productsLoader } from "./routes/products"
 
 const router = createBrowserRouter([
     {
@@ -12,6 +13,11 @@ const router = createBrowserRouter([
                 path: "/",
                 element: <HomeRoute />,
                 loader: homeLoader,
+            },
+            {
+                path: "/products",
+                element: <ProductsRoute />,
+                loader: productsLoader,
             },
             {
                 path: "/products/:slug",
