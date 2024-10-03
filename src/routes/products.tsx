@@ -3,27 +3,25 @@ import { BACKEND_API_URL } from "../libs/env"
 import { Product } from "../types"
 import { ProductsGrid } from "../components/shared/product-grid"
 
-export async function loader({ request }: { request: Request }) {
+import { LoaderFunctionArgs } from "react-router-dom"
+
+export async function loader({ request }: LoaderFunctionArgs) {
     const url = new URL(request.url)
-    const searchQuery = url.searchParams.get("search")
-    const sort = url.searchParams.get("sort") // Ambil parameter sort
+    const searchParams = new URLSearchParams(url.search)
 
     try {
-        const response = await fetch(
-            `${BACKEND_API_URL}/products?search=${encodeURIComponent(
-                searchQuery || ""
-            )}&sort=${encodeURIComponent(sort || "")}`
-        )
+        const response = await fetch(`${BACKEND_API_URL}/products?${searchParams.toString()}`)
         const data = await response.json()
         const products: Product[] = data.data
-        return { products, searchQuery, sort }
+
+        return { products, searchParams: Object.fromEntries(searchParams) }
     } catch (error) {
-        return { products: [], searchQuery: null, sort: null }
+        return { products: [], searchParams: {} }
     }
 }
 
 export function ProductsRoute() {
-    const { products, searchQuery, sort } = useLoaderData() as Awaited<ReturnType<typeof loader>>
+    const { products, searchParams } = useLoaderData() as Awaited<ReturnType<typeof loader>>
     const location = useLocation()
 
     const updateSort = (newSort: string) => {
@@ -39,12 +37,12 @@ export function ProductsRoute() {
         <main className="px-32">
             <div className="py-10">
                 <h1 className="pt-28 flex justify-center text-5xl font-bold text-[#00634B] underline underline-offset-8">
-                    Search Results for: {searchQuery || "All Products"}
+                    Search Results for: {searchParams.search || "All Products"}
                 </h1>
 
                 <div className="flex justify-center mb-4 pt-6">
                     <select
-                        value={sort || ""}
+                        value={searchParams.sort || ""}
                         onChange={(e) => updateSort(e.target.value)}
                         className="border p-2 rounded"
                     >

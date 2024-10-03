@@ -13,10 +13,14 @@ export function SiteNavigation() {
                 <div className="flex  w-full items-center p-1 rounded-md">
                     <SearchProduct />
                 </div>
-                <ShoppingCart className="text-[#F8BA8C] w-10 h-10" />
-                <button className="font-bold p-2 bg-[#F8BA8C] rounded-md text-base text-[#00634B]">
-                    LOGIN
-                </button>
+                <Link to="/cart">
+                    <ShoppingCart className="text-[#F8BA8C] w-10 h-10" />
+                </Link>
+                <Link to="/login">
+                    <button className="font-bold p-2 bg-[#F8BA8C] rounded-md text-base text-[#00634B]">
+                        LOGIN
+                    </button>
+                </Link>
             </div>
         </nav>
     )

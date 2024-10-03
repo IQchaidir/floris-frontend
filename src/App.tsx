@@ -3,6 +3,8 @@ import { RootRoute } from "./routes/root"
 import { HomeRoute, loader as homeLoader } from "./routes/home"
 import { ProductSlugRoute, loader as productSlugLoader } from "./routes/product"
 import { ProductsRoute, loader as productsLoader } from "./routes/products"
+import { CartRoute } from "./routes/cart"
+import { LoginRoute } from "./routes/login"
 
 const router = createBrowserRouter([
     {
@@ -23,6 +25,14 @@ const router = createBrowserRouter([
                 path: "/products/:slug",
                 element: <ProductSlugRoute />,
                 loader: productSlugLoader,
+            },
+            {
+                path: "/cart",
+                element: <CartRoute />,
+            },
+            {
+                path: "/login",
+                element: <LoginRoute />,
             },
         ],
     },

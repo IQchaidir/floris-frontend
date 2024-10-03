@@ -1,25 +1,12 @@
 import { Search } from "lucide-react"
 import { useRef, useEffect } from "react"
-import { useLocation, useNavigate } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 
 export function SearchProduct() {
     const searchInputRef = useRef<HTMLInputElement>(null)
-    const navigate = useNavigate()
     const location = useLocation()
 
     const initialSearch = new URLSearchParams(location.search).get("search") || ""
-
-    const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault()
-
-        if (searchInputRef.current) {
-            const searchTerm = searchInputRef.current.value.trim()
-
-            if (searchTerm) {
-                navigate(`/products?search=${encodeURIComponent(searchTerm)}`)
-            }
-        }
-    }
 
     useEffect(() => {
         if (searchInputRef.current) {
@@ -28,9 +15,10 @@ export function SearchProduct() {
     }, [initialSearch])
 
     return (
-        <form onSubmit={handleSearch} className="flex w-full items-center p-1 rounded-md">
+        <form method="get" action="/products" className="flex w-full items-center p-1 rounded-md">
             <input
                 type="text"
+                name="search"
                 placeholder="What are you looking for?"
                 className="w-full bg-white p-2 rounded-l-md focus:outline-none focus:border-none"
                 ref={searchInputRef}
