@@ -1,4 +1,4 @@
-import { ShoppingBag, ShoppingCart, Trash, X } from "lucide-react"
+import { ShoppingBag, Trash } from "lucide-react"
 import { useState } from "react"
 
 export function CartRoute() {
