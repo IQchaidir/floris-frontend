@@ -18,7 +18,7 @@ export function LoginRoute() {
                     <div className="flex flex-col gap-5">
                         <div className="flex flex-col space-y-2">
                             <label htmlFor="username" className="text-3xl font-semibold">
-                                USERNAME
+                                Username
                             </label>
                             <input
                                 id="username"

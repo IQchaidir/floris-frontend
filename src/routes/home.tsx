@@ -1,4 +1,4 @@
-import { useLoaderData } from "react-router-dom"
+import { Link, useLoaderData } from "react-router-dom"
 import { BACKEND_API_URL } from "../libs/env"
 import { Product } from "../types"
 import { Hero } from "../components/shared/hero"
@@ -26,6 +26,11 @@ export function HomeRoute() {
                     Our Product
                 </div>
                 <ProductsGrid products={products} />
+                <Link to="/products">
+                    <button className="mt-8 w-full font-semibold text-center text-[#00634B] py-2 border-2 border-[#00634B]">
+                        VEW MORE
+                    </button>
+                </Link>
             </div>
         </main>
     )

@@ -26,21 +26,29 @@ export function ProductsRoute() {
 
     const updateSort = (newSort: string) => {
         const searchParams = new URLSearchParams(location.search)
-        searchParams.set("sort", newSort)
+
+        if (newSort) {
+            searchParams.set("sort", newSort)
+        } else {
+            searchParams.delete("sort")
+        }
+
         const newUrl = `${location.pathname}?${searchParams.toString()}`
         window.history.pushState({}, "", newUrl)
 
         window.location.reload()
     }
 
+    const hasSearchParam = searchParams.search && searchParams.search.trim() !== ""
+
     return (
         <main className="px-32">
             <div className="py-10">
-                <h1 className="pt-28 flex justify-center text-5xl font-bold text-[#00634B] underline underline-offset-8">
-                    Search Results for: {searchParams.search || "All Products"}
+                <h1 className="flex  text-5xl font-bold text-[#00634B] underline underline-offset-8">
+                    {hasSearchParam ? `Search Results for: ${searchParams.search}` : "All Products"}
                 </h1>
 
-                <div className="flex justify-center mb-4 pt-6">
+                <div className="flex pt-6">
                     <select
                         value={searchParams.sort || ""}
                         onChange={(e) => updateSort(e.target.value)}
