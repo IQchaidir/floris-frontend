@@ -18,6 +18,7 @@ export type Product = {
     price: number
     description: string
     sku: string
+    stock: number
 
     createdAt: Date
     updatedAt: Date

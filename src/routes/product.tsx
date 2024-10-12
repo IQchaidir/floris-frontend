@@ -1,7 +1,8 @@
-import { LoaderFunctionArgs, useLoaderData } from "react-router-dom"
+import { ActionFunctionArgs, LoaderFunctionArgs, Form, redirect, useLoaderData } from "react-router-dom"
 import { BACKEND_API_URL } from "../libs/env"
 import { Product } from "../types"
 import { convertToIDR } from "../libs/currency"
+import { auth } from "../libs/auth"
 import { useState } from "react"
 
 export async function loader({ params }: LoaderFunctionArgs) {
@@ -19,10 +20,10 @@ export async function loader({ params }: LoaderFunctionArgs) {
 
 export function ProductSlugRoute() {
     const { slug, product } = useLoaderData() as Awaited<ReturnType<typeof loader>>
-    const [quantity, setQuantity] = useState(0)
+    const [quantity, setQuantity] = useState(1)
 
     const handleDecrease = () => {
-        if (quantity > 0) {
+        if (quantity > 1) {
             setQuantity(quantity - 1)
         }
     }
@@ -51,35 +52,82 @@ export function ProductSlugRoute() {
 
     return (
         <main className="px-52 py-10">
-            <div className="flex  justify-between gap-36">
+            <div className="flex justify-between gap-36">
                 <div className="w-1/3">
                     <img src={product.imageURL} alt={product.name} className="rounded-lg" />
                 </div>
                 <div className="space-y-5 w-2/3">
                     <p className="text-4xl font-bold">{product.name}</p>
                     <p className="text-3xl font-bold">{convertToIDR(product.price)}</p>
-                    <p className="text-2xl">quantity</p>
+                    <p className="text-xl">Stock: {product.stock}</p>
                     <div className="flex gap-3 text-2xl">
-                        <button className="border px-5 rounded-md" onClick={handleDecrease}>
+                        <button
+                            className="border px-5 rounded-md"
+                            onClick={handleDecrease}
+                            disabled={quantity <= 1}
+                        >
                             -
                         </button>
                         <input
                             type="text"
                             value={quantity}
                             onChange={handleChange}
-                            className="border  py-2 rounded-md text-center"
+                            className="border py-2 rounded-md text-center"
                         />
                         <button className="border px-5 rounded-md" onClick={handleIncrease}>
                             +
                         </button>
                     </div>
-                    <button className="bg-[#00634B] text-white text-3xl py-2 px-32 rounded">
-                        ADD TO CART
-                    </button>
+                    <Form method="post" className="flex gap-2">
+                        <input type="hidden" name="productId" value={product.id} />
+                        <input type="hidden" name="quantity" value={quantity} />
+                        <button className="bg-[#00634B] text-white text-3xl py-2 px-32 rounded" type="submit">
+                            Add to Cart
+                        </button>
+                    </Form>
                     <p className="text-2xl font-semibold">Description</p>
                     <p>{product.description}</p>
                 </div>
             </div>
         </main>
     )
+}
+
+type AddToCartResponse = {
+    message: string
+    item: {
+        id: string
+        productId: string
+        quantity: number
+        cartId: string
+        createdAt: Date
+        updatedAt: Date
+    }
+}
+
+export async function action({ request }: ActionFunctionArgs) {
+    const token = auth.getToken()
+    if (!token) return null
+
+    const formData = await request.formData()
+
+    const addToCartData = {
+        productId: formData.get("productId")?.toString(),
+        quantity: Number(formData.get("quantity")),
+    }
+
+    const response = await fetch(`${BACKEND_API_URL}/cart/item`, {
+        method: "POST",
+        body: JSON.stringify(addToCartData),
+        headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+        },
+    })
+
+    const addToCartResponse: AddToCartResponse = await response.json()
+    console.log(addToCartResponse)
+    if (!addToCartResponse) return null
+
+    return redirect("/cart")
 }

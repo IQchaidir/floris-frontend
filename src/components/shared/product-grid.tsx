@@ -8,12 +8,12 @@ export function ProductsGrid({ products }: { products: Product[] }) {
             {products.map((product) => (
                 <li key={product.id} className="hovtransition-transform duration-300 hover:scale-110">
                     <Link to={`/products/${product.slug}`}>
-                        <div className="border-4 border-[#F8BA8C] rounded-lg bg-[#F8BA8C]">
+                        <div className="border-4 border-[#F8BA8C] w-[250px] rounded-lg bg-[#F8BA8C]">
                             <div>
                                 <img
                                     src={product.imageURL}
                                     alt={product.name}
-                                    className="w-full h-[400px] rounded-md rounded-b-none"
+                                    className="w-full h-[300px] rounded-md rounded-b-none"
                                 />
                             </div>
 

@@ -1,32 +1,27 @@
-import { ShoppingBag, Trash } from "lucide-react"
-import { useState } from "react"
+import { ShoppingBag } from "lucide-react"
+import { auth } from "../libs/auth"
+import { ActionFunctionArgs, redirect, useLoaderData } from "react-router-dom"
+import { BACKEND_API_URL } from "../libs/env"
+import { Cart } from "../types"
+import { CartItemsList } from "../components/shared/cart-item-list"
+
+export async function loader() {
+    const user = await auth.checkUser()
+    if (!user) return redirect("/login")
+
+    const response = await fetch(`${BACKEND_API_URL}/cart`, {
+        headers: { Authorization: `Bearer ${auth.getToken()}` },
+    })
+
+    const data = await response.json()
+    const cart: Cart = data.cart
+
+    return { cart }
+}
 
 export function CartRoute() {
-    const [quantity, setQuantity] = useState(0)
-
-    const handleDecrease = () => {
-        if (quantity > 0) {
-            setQuantity(quantity - 1)
-        }
-    }
-
-    const handleIncrease = () => {
-        setQuantity(quantity + 1)
-    }
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value
-
-        if (value === "") {
-            setQuantity(0)
-            return
-        }
-
-        const parsedValue = parseInt(value)
-        if (!isNaN(parsedValue) && parsedValue >= 0) {
-            setQuantity(parsedValue)
-        }
-    }
+    const data = useLoaderData() as Awaited<ReturnType<typeof loader>>
+    if (data instanceof Response) return null
 
     return (
         <main className="px-32">
@@ -43,42 +38,40 @@ export function CartRoute() {
                         </button>
                     </div>
                 </div>
-                <div className="border p-5 rounded-md flex justify-between">
-                    <div className="flex gap-10 items-center">
-                        <div>
-                            <img
-                                src="https://via.placeholder.com/150"
-                                className="w-48 h-48 object-cover bg-[#00634B] rounded-md"
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <p className="text-2xl font-bold">PLANTAE</p>
-                            <p className="text-xl text-gray-500">Price Rp 10.0000</p>
-                            <div className="flex gap-3 text-lg pt-2">
-                                <button className="border px-5 rounded-md" onClick={handleDecrease}>
-                                    -
-                                </button>
-                                <input
-                                    type="text"
-                                    value={quantity}
-                                    onChange={handleChange}
-                                    className="border py-2 px-5 rounded-md text-center w-28"
-                                />
-                                <button className="border px-5 rounded-md" onClick={handleIncrease}>
-                                    +
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="flex items-center gap-20">
-                        <p className="text-4xl">Rp 10.0000</p>
-
-                        <button>
-                            <Trash className="w-8 h-8 text-red-500" />
-                        </button>
-                    </div>
-                </div>
+                <CartItemsList cartItems={data.cart.items} />
             </div>
         </main>
     )
+}
+
+export async function action({ request }: ActionFunctionArgs) {
+    const token = auth.getToken()
+    if (!token) return null
+
+    const formData = await request.formData()
+    const productId = formData.get("productId")?.toString()
+    const quantity = Number(formData.get("quantity"))
+
+    const method = request.method === "DELETE" ? "DELETE" : "PUT"
+
+    const cartItemData = {
+        productId,
+        quantity: method === "DELETE" ? undefined : quantity,
+    }
+
+    const response = await fetch(`${BACKEND_API_URL}/cart/item/${productId}`, {
+        method,
+        body: method === "DELETE" ? null : JSON.stringify(cartItemData),
+        headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+        },
+    })
+
+    const cartResponse = await response.json()
+    console.log(cartResponse)
+
+    if (!cartResponse) return null
+
+    return redirect("/cart")
 }
