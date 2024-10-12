@@ -4,6 +4,7 @@ import { Product } from "../types"
 import { convertToIDR } from "../libs/currency"
 import { auth } from "../libs/auth"
 import { useState } from "react"
+import { toast } from "@/hooks/use-toast"
 
 export async function loader({ params }: LoaderFunctionArgs) {
     const { slug } = params
@@ -107,7 +108,7 @@ type AddToCartResponse = {
 
 export async function action({ request }: ActionFunctionArgs) {
     const token = auth.getToken()
-    if (!token) return null
+    if (!token) return redirect("/login")
 
     const formData = await request.formData()
 
@@ -126,8 +127,16 @@ export async function action({ request }: ActionFunctionArgs) {
     })
 
     const addToCartResponse: AddToCartResponse = await response.json()
-    console.log(addToCartResponse)
-    if (!addToCartResponse) return null
 
-    return redirect("/cart")
+    if (!response.ok) {
+        return toast({
+            variant: "destructive",
+            title: `${addToCartResponse.message || "Failed to add item to cart."}`,
+        })
+    }
+
+    return toast({
+        variant: "default",
+        title: `${addToCartResponse.message || "Item added to cart successfully!"}`,
+    })
 }

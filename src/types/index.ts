@@ -7,6 +7,8 @@ export type User = {
 
     createdAt: Date
     updatedAt: Date
+
+    totalCart: number
 }
 
 export type Product = {
@@ -34,6 +36,8 @@ export type Cart = {
 
     createdAt: Date
     updatedAt: Date
+
+    totalAmount: number
 }
 
 export type CartItem = {
@@ -48,4 +52,6 @@ export type CartItem = {
 
     createdAt: Date
     updatedAt: Date
+
+    totalPrice: number
 }

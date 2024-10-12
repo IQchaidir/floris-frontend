@@ -108,9 +108,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     const result = await auth.register(userRegister)
 
-    if (!result) {
-        return { error: "Failed to register user." }
-    }
+    if (!result) return null
 
     return redirect("/login")
 }

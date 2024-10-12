@@ -4,6 +4,8 @@ import { ActionFunctionArgs, redirect, useLoaderData } from "react-router-dom"
 import { BACKEND_API_URL } from "../libs/env"
 import { Cart } from "../types"
 import { CartItemsList } from "../components/shared/cart-item-list"
+import { toast } from "@/hooks/use-toast"
+import { convertToIDR } from "@/libs/currency"
 
 export async function loader() {
     const user = await auth.checkUser()
@@ -24,14 +26,14 @@ export function CartRoute() {
     if (data instanceof Response) return null
 
     return (
-        <main className="px-32">
+        <main className="px-32 pb-8">
             <div className="pt-20 space-y-6">
                 <div className="flex justify-between items-center">
                     <p className="text-3xl font-bold">Your Cart</p>
                     <div className="flex gap-5">
                         <div className="text-end text-xl text-gray-500">
                             <p>Subtotal</p>
-                            <p>Rp 100.000</p>
+                            <p>{convertToIDR(data.cart.totalAmount)}</p>
                         </div>
                         <button className="flex gap-2 items-center bg-[#F8BA8C] text-[#00634B] px-5 rounded-md">
                             <ShoppingBag /> <span className="text-lg font-semibold">CHECKOUT</span>
@@ -69,7 +71,6 @@ export async function action({ request }: ActionFunctionArgs) {
     })
 
     const cartResponse = await response.json()
-    console.log(cartResponse)
 
     if (!cartResponse) return null
 

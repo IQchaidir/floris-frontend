@@ -1,4 +1,4 @@
-import { Outlet, useLoaderData } from "react-router-dom"
+import { Outlet, ScrollRestoration, useLoaderData } from "react-router-dom"
 import { SiteNavigation } from "../components/shared/site-navigation"
 import { SiteFooter } from "../components/shared/site-footer"
 import { auth } from "../libs/auth"
@@ -21,6 +21,7 @@ export function RootRoute() {
     const { isAuthenticated, user } = useLoaderData() as Awaited<ReturnType<typeof loader>>
     return (
         <CookiesProvider defaultSetOptions={{ path: "/" }}>
+            <ScrollRestoration />
             <div className="flex flex-col min-h-screen">
                 <SiteNavigation isAuthenticated={isAuthenticated} user={user} />
                 <div className="flex-[1]">

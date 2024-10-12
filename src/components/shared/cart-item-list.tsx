@@ -1,16 +1,14 @@
 import { Link, Form } from "react-router-dom"
-import { Trash } from "lucide-react"
+import { ShoppingCartIcon, Trash } from "lucide-react"
 import { CartItem } from "../../types"
 import { convertToIDR } from "../../libs/currency"
 
 export function CartItemsList({ cartItems }: { cartItems: CartItem[] }) {
     if (cartItems.length <= 0) {
         return (
-            <div className="space-y-2">
-                <p>Your cart is empty</p>
-                <button>
-                    <Link to="/products">Add some products</Link>
-                </button>
+            <div className=" flex flex-col space-y-2 items-center pt-14 text-4xl font-semibold">
+                <ShoppingCartIcon className="w-28 h-28" />
+                <p>Your cart is currently empty!</p>
             </div>
         )
     }
@@ -66,9 +64,7 @@ export function CartItemsList({ cartItems }: { cartItems: CartItem[] }) {
                             </div>
                         </div>
                         <div className="flex items-center gap-10">
-                            <p className="text-3xl">
-                                {convertToIDR(cartItem.product.price * cartItem.quantity)}
-                            </p>
+                            <p className="text-3xl">{convertToIDR(cartItem.totalPrice)}</p>
                             <Form method="delete" className="flex gap-2">
                                 <input type="hidden" name="productId" value={cartItem.id} />
                                 <button type="submit">

@@ -27,7 +27,7 @@ export function HomeRoute() {
                 </div>
                 <ProductsGrid products={products} />
                 <Link to="/products">
-                    <button className="mt-8 w-full font-semibold text-center text-[#00634B] py-2 border-2 border-[#00634B]">
+                    <button className="mt-8 w-full rounded-md font-semibold text-center text-[#00634B] py-2 border-2 border-[#00634B] hover:bg-gray-100">
                         VEW MORE
                     </button>
                 </Link>

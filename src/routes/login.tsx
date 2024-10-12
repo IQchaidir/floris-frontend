@@ -25,7 +25,7 @@ export function LoginRoute() {
                                 type="text"
                                 name="username"
                                 required
-                                className="border rounded-md text-3xl"
+                                className="border rounded-md text-3xl px-2 py-1"
                             />
                         </div>
 
@@ -38,7 +38,7 @@ export function LoginRoute() {
                                 type="password"
                                 name="password"
                                 required
-                                className="border rounded-md text-3xl"
+                                className="border rounded-md text-3xl px-2 py-1"
                             />
                         </div>
                     </div>

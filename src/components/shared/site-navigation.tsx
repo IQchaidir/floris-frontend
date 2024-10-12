@@ -11,7 +11,7 @@ interface SiteNavigationProps {
 
 export function SiteNavigation({ isAuthenticated, user }: SiteNavigationProps) {
     return (
-        <nav className="flex justify-between items-center px-32 py-5 bg-[#00634B]">
+        <nav className="sticky top-0 flex z-50 justify-between items-center px-32 py-5 bg-[#00634B]">
             <Link to="/" className="flex gap-3 items-center">
                 <img src="/logo.png" className="w-7 h-10" />
                 <div className="text-white font-bold text-4xl">FLORIS</div>
@@ -22,8 +22,13 @@ export function SiteNavigation({ isAuthenticated, user }: SiteNavigationProps) {
                 </div>
                 {isAuthenticated && user ? (
                     <>
-                        <Link to="/cart">
+                        <Link to="/cart" className="relative">
                             <ShoppingCart className="text-[#F8BA8C] w-10 h-10" />
+                            {user && (
+                                <span className="absolute -top-1 -right-3 bg-red-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
+                                    {user.totalCart ?? 0}
+                                </span>
+                            )}
                         </Link>
                         <Link to="/dashboard">
                             <img

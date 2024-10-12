@@ -1,3 +1,4 @@
+import { toast } from "@/hooks/use-toast"
 import { UserLogin, UserRegister } from "../schemas/user"
 import { User } from "../types"
 import { accessToken } from "./access-token"
@@ -27,10 +28,18 @@ export const auth: Auth = {
         })
 
         if (!response.ok) {
+            const errorResponse = await response.json()
+            toast({
+                variant: "destructive",
+                title: `${errorResponse.error}`,
+            })
             return null
         }
 
         const user: User = await response.json()
+        toast({
+            title: `Success register account!`,
+        })
         return user
     },
 
@@ -41,6 +50,14 @@ export const auth: Auth = {
                 body: JSON.stringify(userLogin),
                 headers: { "Content-Type": "application/json" },
             })
+
+            if (!response.ok) {
+                const errorResponse = await response.json()
+                toast({
+                    variant: "destructive",
+                    title: `${errorResponse.error}`,
+                })
+            }
 
             const data: { token?: string; user?: User } = await response.json()
             if (!data.token) return null

@@ -44,7 +44,7 @@ export function ProductsRoute() {
     return (
         <main className="px-32">
             <div className="py-10">
-                <h1 className="flex  text-5xl font-bold text-[#00634B] underline underline-offset-8">
+                <h1 className="flex  text-5xl font-bold text-[#00634B]">
                     {hasSearchParam ? `Search Results for: ${searchParams.search}` : "All Products"}
                 </h1>
 
