@@ -4,7 +4,6 @@ import { ActionFunctionArgs, redirect, useLoaderData } from "react-router-dom"
 import { BACKEND_API_URL } from "../libs/env"
 import { Cart } from "../types"
 import { CartItemsList } from "../components/shared/cart-item-list"
-import { toast } from "@/hooks/use-toast"
 import { convertToIDR } from "@/libs/currency"
 
 export async function loader() {
