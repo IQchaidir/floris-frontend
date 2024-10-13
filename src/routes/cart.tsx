@@ -5,6 +5,7 @@ import { BACKEND_API_URL } from "../libs/env"
 import { Cart } from "../types"
 import { CartItemsList } from "../components/shared/cart-item-list"
 import { convertToIDR } from "@/libs/currency"
+import { toast } from "@/hooks/use-toast"
 
 export async function loader() {
     const user = await auth.checkUser()
@@ -71,7 +72,12 @@ export async function action({ request }: ActionFunctionArgs) {
 
     const cartResponse = await response.json()
 
-    if (!cartResponse) return null
+    if (!response.ok) {
+        return toast({
+            variant: "destructive",
+            title: `${cartResponse.message || "Failed to add item to cart."}`,
+        })
+    }
 
     return redirect("/cart")
 }
